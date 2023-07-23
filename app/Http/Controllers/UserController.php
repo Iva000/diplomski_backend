@@ -44,7 +44,7 @@ class UserController extends Controller
 
         $token = $user->createToken('auth_token')->plainTextToken;
 
-        return response()->json(['response' => 'You have been successfully registerd!', 'created_user' => new UserResource($user), 'access_token' => $token, 'token_type' => 'Bearer']);
+        return response()->json(['success' => 'true', 'response' => 'You have been successfully registerd!', 'created_user' => new UserResource($user), 'access_token' => $token, 'token_type' => 'Bearer']);
     }
 
     public function update(Request $request, User $user)
