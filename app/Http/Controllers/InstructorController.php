@@ -77,6 +77,7 @@ class InstructorController extends Controller
         $token = $instructor->createToken('auth_token')->plainTextToken;
 
         return response()->json([
+            'success' => 'true',
             'response' => 'You have been successfully registerd!', 'created_user' => new InstructorResource($instructor),
             'access_token' => $token,
             'token_type' => 'Bearer'
@@ -104,51 +105,69 @@ class InstructorController extends Controller
      */
     public function update(Request $request, Instructor $instructor)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'name' => 'required|string|max:255',
-                'surname' => 'required|string|max:255',
-                'skiSchool' => 'required|string|max:255',
-                'experience' => 'required',
-                'price' => 'required',
-                // 'email' => '',
-                // 'password' => '',
-                'activity' => 'required|string|max:255',
-                'description' => 'required|string|max:255',
-                'phoneNumber' => 'required|string|max:255',
-                'status' => 'required',
-                'photo' => 'required|string|max:255',
-                'mountain_id' => 'required'
+
+        $validatedData = $request->validate([
+            'name' => 'required|string|max:255',
+            'surname' => 'required|string|max:255',
+            'skiSchool' => 'required|string|max:255',
+            'experience' => 'required',
+            'price' => 'required',
+            'email' => '',
+            'password' => '',
+            'activity' => 'required|string|max:255',
+            'description' => 'required|string|max:255',
+            'phoneNumber' => 'required|string|max:255',
+            'status' => 'required',
+            'photo' => 'required|string|max:255',
+            'mountain_id' => 'nullable|exists:mountains,id'
+        ]);
+
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         'name' => 'required|string|max:255',
+        //         'surname' => 'required|string|max:255',
+        //         'skiSchool' => 'required|string|max:255',
+        //         'experience' => 'required',
+        //         'price' => 'required',
+        //         'email' => '',
+        //         'password' => '',
+        //         'activity' => 'required|string|max:255',
+        //         'description' => 'required|string|max:255',
+        //         'phoneNumber' => 'required|string|max:255',
+        //         'status' => 'required',
+        //         'photo' => 'required|string|max:255',
+        //         'mountain_id' => 'required'
 
 
-            ]
-        );
+        //     ]
+        // );
 
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
+        // if ($validatedData->fails()) {
+        //     return response()->json($validator->errors());
+        // }
 
+        $instructor = Instructor::find($request->id);
 
-        $instructor->name = $request->name;
-        $instructor->surname = $request->surname;
-        $instructor->skiSchool = $request->skiSchool;
-        $instructor->experience = $request->experience;
-        $instructor->price = $request->price;
+        // $instructor->name = $request->name;
+        // $instructor->surname = $request->surname;
+        // $instructor->skiSchool = $request->skiSchool;
+        // $instructor->experience = $request->experience;
+        // $instructor->price = $request->price;
         // $instructor->email = $request->email;
         // $instructor->password = $request->password;
-        $instructor->activity = $request->activity;
-        $instructor->description =  $request->description;
-        $instructor->phoneNumber = $request->phoneNumber;
-        $instructor->status = $request->status;
-        $instructor->photo = $request->photo;
-        $instructor->mountain_id = $request->mountain_id;
+        // $instructor->activity = $request->activity;
+        // $instructor->description =  $request->description;
+        // $instructor->phoneNumber = $request->phoneNumber;
+        // $instructor->status = $request->status;
+        // $instructor->photo = $request->photo;
+        // $instructor->mountain_id = $request->mountain->id;
 
-        $instructor->update();
+        $instructor->update($validatedData);
 
 
-        return response()->json(['response' => 'You have successfully changed your information!']);
+        return response()->json(['success' => 'true', 'response' => 'You have successfully changed your information!']);
     }
 
     /**
@@ -161,17 +180,17 @@ class InstructorController extends Controller
 
     public function login(Request $request)
     {
-        // if (!Auth::attempt($request->only('email', 'password'))) {
-        //     return response()->json(['success' => 'false']);
-        // }
+        if (!Auth::attempt($request->only('email', 'password'))) {
+            return response()->json(['success' => 'false']);
+        }
 
         $instructor = Instructor::where('email', $request['email'])->first();
 
-        //$token = $instructor->createToken('auth_token')->plainTextToken;
+        $token = $instructor->createToken('auth_token')->plainTextToken;
 
         return response()->json([
             'success' => 'true',
-            //'access_token' => $token,
+            'access_token' => $token,
             'token_type' => 'Bearer', 'instructor' => $instructor
         ]);
     }
