@@ -8,6 +8,7 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Log;
 
 class InstructorController extends Controller
 {
@@ -180,7 +181,7 @@ class InstructorController extends Controller
 
     public function login(Request $request)
     {
-        if (!Auth::attempt($request->only('email', 'password'))) {
+        if (!Auth::guard('instructor')->validate(['email' => $request->input('email'), 'password' => $request->input('password')])) {
             return response()->json(['success' => 'false']);
         }
 
@@ -188,11 +189,7 @@ class InstructorController extends Controller
 
         $token = $instructor->createToken('auth_token')->plainTextToken;
 
-        return response()->json([
-            'success' => 'true',
-            'access_token' => $token,
-            'token_type' => 'Bearer', 'instructor' => $instructor
-        ]);
+        return response()->json(['success' => 'true', 'access_token' => $token, 'token_type' => 'instructor', 'instructor' => $instructor]);
     }
 
     public function logout()
@@ -201,5 +198,13 @@ class InstructorController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json(['response' => 'Logged out!']);
+    }
+
+    public function getInstructorsByStatus($status)
+    {
+        $instructors = Instructor::where('status', $status)->get();
+
+        //return response()->json($instructors);
+        return InstructorResource::collection($instructors);
     }
 }

@@ -25,6 +25,7 @@ Route::middleware('auth:sanctum')->get('/user', function (Request $request) {
 Route::get('/mountains', [MountainController::class, 'index']);
 
 Route::get('/instructors', [InstructorController::class, 'index']);
+Route::get('/getInstructorsByStatus/{status}', [InstructorController::class, 'getInstructorsByStatus']);
 Route::post('/addInstructor', [InstructorController::class, 'store']);
 Route::post('/updateInstructor', [InstructorController::class, 'update']);
 Route::post('/loginInstructor', [InstructorController::class, 'login']);

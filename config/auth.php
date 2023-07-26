@@ -40,6 +40,16 @@ return [
             'driver' => 'session',
             'provider' => 'users',
         ],
+
+        'api' => [
+            'driver' => 'sanctum',
+            'provider' => 'users',
+        ],
+
+        'instructor' => [
+            'driver' => 'session', // Or use 'token' driver if not using Sanctum
+            'provider' => 'instructors', // Replace with your instructor provider name if different
+        ],
     ],
 
     /*
@@ -63,6 +73,10 @@ return [
         'users' => [
             'driver' => 'eloquent',
             'model' => App\Models\User::class,
+        ],
+        'instructors' => [
+            'driver' => 'eloquent',
+            'model' => App\Models\Instructor::class,
         ],
 
         // 'users' => [
