@@ -204,7 +204,6 @@ class InstructorController extends Controller
     {
         $instructors = Instructor::where('status', $status)->get();
 
-        //return response()->json($instructors);
         return InstructorResource::collection($instructors);
     }
 }

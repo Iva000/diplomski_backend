@@ -20,7 +20,7 @@ class PeriodResource extends JsonResource
             'time' => $this->resource->time,
             'price' => $this->resource->price,
             'status' => $this->resource->status,
-            'instructor_id' => new InstructorResource($this->resource->instructor_id), //mozda treba u zagradi samo instructor bez id
+            'instructor' => new InstructorResource($this->resource->instructor),
         ];
     }
 }

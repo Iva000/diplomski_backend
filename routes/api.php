@@ -3,6 +3,7 @@
 use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\MountainController;
+use App\Http\Controllers\PeriodController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -38,8 +39,8 @@ Route::post('/updateUser', [UserController::class, 'update']);
 Route::post('/loginUser', [UserController::class, 'login']);
 Route::post('/logoutUser', [UserController::class, 'logout']);
 
-Route::get('/getClass', [PeriodController::class, 'index']);
-Route::post('/addNewClass', [PeriodController::class, 'add']);
+Route::get('/getClass/{id}', [PeriodController::class, 'index']);
+Route::post('/addNewClass', [PeriodController::class, 'createPeriods']);
 Route::post('/updateClass', [PeriodController::class, 'update']);
 
 Route::get('/getUsersReservations', [ReservationController::class, 'getFromUser']);
