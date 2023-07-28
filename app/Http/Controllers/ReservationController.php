@@ -52,8 +52,6 @@ class ReservationController extends Controller
             [
                 'totalPrice' => 'required',
                 'period_id' => 'required',
-                'equipment_id' => 'required',
-                'equipmentDescription' => 'required',
                 'user_id' => 'required',
                 'status' => 'required',
             ]
@@ -67,14 +65,12 @@ class ReservationController extends Controller
         $reservation = Reservation::create([
             'totalPrice' => $request->totalPrice,
             'period_id' => $request->period_id,
-            'equipment_id' => $request->equipment_id,
-            'equipmentDescription' => $request->equipmentDescription,
             'user_id' => $request->user_id,
             'status' => $request->status,
         ]);
 
 
-        return response()->json(['response' => 'You have been successfully made reservation!', 'created_reservation' => new ReservationResource($reservation)]);
+        return response()->json(['success' => 'true', 'response' => 'You have been successfully made reservation!', 'created_reservation' => new ReservationResource($reservation)]);
     }
 
     public function update(Request $request, Reservation $reservation)

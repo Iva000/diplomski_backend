@@ -6,7 +6,7 @@ use App\Models\Equipment;
 use Illuminate\Http\Request;
 use Illuminate\Http\Resources\Json\JsonResource;
 
-class ReservationResource extends JsonResource
+class ReservationEquipmentResource extends JsonResource
 {
     /**
      * Transform the resource into an array.
@@ -16,11 +16,9 @@ class ReservationResource extends JsonResource
     public function toArray(Request $request): array
     {
         return [
-            'id' => $this->resource->id,
-            'totalPrice' => $this->resource->totalPrice,
-            'period' => new PeriodResource($this->resource->period),
-            'user' => new UserResource($this->resource->user),
-            'status' => $this->resource->status,
+            'reservation' => new ReservationResource($this->resource->reservation),
+            'equipment' => new EquipmentResource($this->resource->equipment),
+            'equipmentInformation' => $this->resource->equipmentInformation,
         ];
     }
 }

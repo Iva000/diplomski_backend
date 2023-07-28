@@ -4,6 +4,8 @@ use App\Http\Controllers\EquipmentController;
 use App\Http\Controllers\InstructorController;
 use App\Http\Controllers\MountainController;
 use App\Http\Controllers\PeriodController;
+use App\Http\Controllers\ReservationController;
+use App\Http\Controllers\ReservationEquipmentController;
 use App\Http\Controllers\UserController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -47,3 +49,5 @@ Route::get('/getUsersReservations', [ReservationController::class, 'getFromUser'
 Route::get('/getInstructorsReservations', [ReservationController::class, 'getFromInstructor']);
 Route::post('/makeReservation', [ReservationController::class, 'add']);
 Route::post('/updateReservation', [ReservationController::class, 'update']);
+
+Route::post('/makeEquipmentReservation', [ReservationEquipmentController::class, 'addReservationEquipment']);
