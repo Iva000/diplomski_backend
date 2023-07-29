@@ -123,47 +123,7 @@ class InstructorController extends Controller
             'mountain_id' => 'nullable|exists:mountains,id'
         ]);
 
-        // $validator = Validator::make(
-        //     $request->all(),
-        //     [
-        //         'name' => 'required|string|max:255',
-        //         'surname' => 'required|string|max:255',
-        //         'skiSchool' => 'required|string|max:255',
-        //         'experience' => 'required',
-        //         'price' => 'required',
-        //         'email' => '',
-        //         'password' => '',
-        //         'activity' => 'required|string|max:255',
-        //         'description' => 'required|string|max:255',
-        //         'phoneNumber' => 'required|string|max:255',
-        //         'status' => 'required',
-        //         'photo' => 'required|string|max:255',
-        //         'mountain_id' => 'required'
-
-
-        //     ]
-        // );
-
-
-        // if ($validatedData->fails()) {
-        //     return response()->json($validator->errors());
-        // }
-
         $instructor = Instructor::find($request->id);
-
-        // $instructor->name = $request->name;
-        // $instructor->surname = $request->surname;
-        // $instructor->skiSchool = $request->skiSchool;
-        // $instructor->experience = $request->experience;
-        // $instructor->price = $request->price;
-        // $instructor->email = $request->email;
-        // $instructor->password = $request->password;
-        // $instructor->activity = $request->activity;
-        // $instructor->description =  $request->description;
-        // $instructor->phoneNumber = $request->phoneNumber;
-        // $instructor->status = $request->status;
-        // $instructor->photo = $request->photo;
-        // $instructor->mountain_id = $request->mountain->id;
 
         $instructor->update($validatedData);
 

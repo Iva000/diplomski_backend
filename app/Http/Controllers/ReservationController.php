@@ -11,36 +11,24 @@ use Illuminate\Support\Facades\Validator;
 
 class ReservationController extends Controller
 {
-    public function getFromUser()
+    public function getFromUser($id, $status)
     {
-        $reservations = Reservation::get()->where('user_id', Auth::user()->id);
-
-        if (sizeof($reservations) == 0) {
-            return response()->json(['response' => "There are no reservations made!"]);
-        }
+        $reservations = Reservation::where('user_id', $id)
+            ->where('status', $status)
+            ->get();
 
         return ReservationResource::collection($reservations);
     }
 
-    public function getFromInstructor()
+    public function getFromInstructor($id, $status)
     {
-        $currentDate = Carbon::now()->toDateString();
-
-        $reservations = Reservation::whereHas('period', function ($query) use ($currentDate) {
-            $query->whereDate('date', $currentDate);
-        })
-            ->where('instructor_id', Auth::instructor()->id)
+        $reservations = Reservation::with('user')
+            ->whereHas('period', function ($query) use ($id) {
+                $query->where('instructor_id', $id);
+            })
+            // $reservations = Reservation::where('instructor_id', $id)
+            ->where('status', $status)
             ->get();
-
-        // $reservations = Reservation::where('instructor_id', Auth::instructor()->id)
-        //     ->whereDate('date', $currentDate)
-        //     ->get();
-
-        //$reservations = Reservation::get()->where('instructor_id', Auth::instructor()->id);
-
-        if (sizeof($reservations) == 0) {
-            return response()->json(['response' => "There are no reservations made for today!"]);
-        }
 
         return ReservationResource::collection($reservations);
     }
@@ -75,22 +63,13 @@ class ReservationController extends Controller
 
     public function update(Request $request, Reservation $reservation)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'status' => 'required',
-            ]
-        );
+        $validatedData = $request->validate([
+            'status' => '',
+            'totalPrice' => ''
+        ]);
 
-
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-
-
-        $reservation->status = $request->status;
-
-        $reservation->save();
+        $reservation = Reservation::find($request->id);
+        $reservation->update($validatedData);
 
 
         return response()->json(['response' => 'You have successfully changed status of reservation!']);

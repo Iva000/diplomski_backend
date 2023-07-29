@@ -35,4 +35,9 @@ class Reservation extends Model
         return $this->belongsToMany(Equipment::class, 'reservation_equipment')
             ->withPivot('equipmentInformation');
     }
+
+    public function user()
+    {
+        return $this->belongsTo(User::class, 'user_id');
+    }
 }

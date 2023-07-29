@@ -15,7 +15,6 @@ class PeriodController extends Controller
 
     public function index($id)
     {
-        //$instructor = Instructor::where('id', $id)->first();
 
         $periods = Period::where('instructor_id', $id)->get();
 
@@ -100,23 +99,29 @@ class PeriodController extends Controller
 
     public function update(Request $request, Period $period)
     {
-        $validator = Validator::make(
-            $request->all(),
-            [
-                'status' => 'required',
-            ]
-        );
+        // $validator = Validator::make(
+        //     $request->all(),
+        //     [
+        //         'status' => 'required',
+        //     ]
+        // );
 
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
+        // if ($validator->fails()) {
+        //     return response()->json($validator->errors());
+        // }
 
 
-        $period->status = $request->status;
+        // $period->status = $request->status;
 
-        $period->save();
+        // $period->save();
 
+        $validatedData = $request->validate([
+            'status' => '',
+        ]);
+
+        $period = Period::find($request->id);
+        $period->update($validatedData);
 
         return response()->json(['response' => 'You have successfully changed status of class!']);
     }
