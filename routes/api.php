@@ -33,6 +33,7 @@ Route::post('/addInstructor', [InstructorController::class, 'store']);
 Route::post('/updateInstructor', [InstructorController::class, 'update']);
 Route::post('/loginInstructor', [InstructorController::class, 'login']);
 Route::post('/logoutInstructor', [InstructorController::class, 'logout']);
+Route::get('/getInstructor/{id}', [InstructorController::class, 'getInstructor']);
 
 Route::get('/equipments', [EquipmentController::class, 'index']);
 
@@ -40,6 +41,7 @@ Route::post('/registerNewUser', [UserController::class, 'register']);
 Route::post('/updateUser', [UserController::class, 'update']);
 Route::post('/loginUser', [UserController::class, 'login']);
 Route::post('/logoutUser', [UserController::class, 'logout']);
+Route::get('/getUser/{id}', [UserController::class, 'getUser']);
 
 Route::get('/getClass/{id}', [PeriodController::class, 'index']);
 Route::post('/addNewClass', [PeriodController::class, 'createPeriods']);

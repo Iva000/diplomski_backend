@@ -49,31 +49,18 @@ class UserController extends Controller
 
     public function update(Request $request, User $user)
     {
-        $validator = Validator::make(
-            $request->all(),
+        $validatedData = $request->validate(
             [
-                'name' => 'required|string|max:255',
-                'surname' => 'required|string|max:255',
-                'phoneNumber' => 'required|string|max:255',
-
-
+                'name' => '',
+                'surname' => '',
+                'phoneNumber' => '',
             ]
         );
 
+        $user = User::find($request->id);
+        $user->update($validatedData);
 
-        if ($validator->fails()) {
-            return response()->json($validator->errors());
-        }
-
-
-        $user->name = $request->name;
-        $user->surname = $request->surname;
-        $user->phoneNumber = $request->phoneNumber;
-
-        $user->save();
-
-
-        return response()->json(['response' => 'You have successfully changed your information!']);
+        return response()->json(['success' => 'true', 'response' => 'You have successfully changed your information!']);
     }
 
     public function login(Request $request)
@@ -95,5 +82,12 @@ class UserController extends Controller
         auth()->user()->tokens()->delete();
 
         return response()->json(['response' => 'Logged out!']);
+    }
+
+    public function getUser($id)
+    {
+        $user = User::where('id', $id)->get();
+
+        return response()->json(['user' => $user]);
     }
 }

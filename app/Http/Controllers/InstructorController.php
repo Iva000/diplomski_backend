@@ -166,4 +166,11 @@ class InstructorController extends Controller
 
         return InstructorResource::collection($instructors);
     }
+
+    public function getInstructor($id)
+    {
+        $instructor = Instructor::where('id', $id)->get();
+
+        return response()->json(['instructor' => $instructor]);
+    }
 }
