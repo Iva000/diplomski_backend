@@ -20,14 +20,37 @@ class ReservationController extends Controller
         return ReservationResource::collection($reservations);
     }
 
+    public function getPreviousFromUser($id)
+    {
+        $reservations = Reservation::where('user_id', $id)
+            ->whereIn('status', [1, 2, 0])
+            ->get();
+
+        return ReservationResource::collection($reservations);
+    }
+
     public function getFromInstructor($id, $status)
     {
         $reservations = Reservation::with('user')
             ->whereHas('period', function ($query) use ($id) {
                 $query->where('instructor_id', $id);
             })
-            // $reservations = Reservation::where('instructor_id', $id)
             ->where('status', $status)
+            ->get();
+
+        return ReservationResource::collection($reservations);
+    }
+
+    public function getSchedule($id)
+    {
+        $currentDate = Carbon::now()->toDateString();
+
+        $reservations = Reservation::with('user')
+            ->whereHas('period', function ($query) use ($id) {
+                $query->where('instructor_id', $id)
+                    ->whereDate('date', Carbon::now()->toDateString());
+            })
+            ->where('status', 1)
             ->get();
 
         return ReservationResource::collection($reservations);

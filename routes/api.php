@@ -48,7 +48,9 @@ Route::post('/addNewClass', [PeriodController::class, 'createPeriods']);
 Route::post('/updateClass', [PeriodController::class, 'update']);
 
 Route::get('/getUsersReservations/{id}/{status}', [ReservationController::class, 'getFromUser']);
+Route::get('/getPreviousUsersReservations/{id}', [ReservationController::class, 'getPreviousFromUser']);
 Route::get('/getInstructorsReservations/{id}/{status}', [ReservationController::class, 'getFromInstructor']);
+Route::get('/getSchedule/{id}', [ReservationController::class, 'getSchedule']);
 Route::post('/makeReservation', [ReservationController::class, 'add']);
 Route::post('/updateReservation', [ReservationController::class, 'update']);
 
