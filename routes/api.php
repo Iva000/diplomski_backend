@@ -29,11 +29,13 @@ Route::get('/mountains', [MountainController::class, 'index']);
 
 Route::get('/instructors', [InstructorController::class, 'index']);
 Route::get('/getInstructorsByStatus/{status}', [InstructorController::class, 'getInstructorsByStatus']);
+Route::get('/getInstructorsByMountain/{mountain}', [InstructorController::class, 'getInstructorsByMountain']);
 Route::post('/addInstructor', [InstructorController::class, 'store']);
 Route::post('/updateInstructor', [InstructorController::class, 'update']);
 Route::post('/loginInstructor', [InstructorController::class, 'login']);
 Route::post('/logoutInstructor', [InstructorController::class, 'logout']);
 Route::get('/getInstructor/{id}', [InstructorController::class, 'getInstructor']);
+Route::post('/filterInstructors', [InstructorController::class, 'filterInstructors']);
 
 Route::get('/equipments', [EquipmentController::class, 'index']);
 
@@ -56,3 +58,4 @@ Route::post('/updateReservation', [ReservationController::class, 'update']);
 
 Route::post('/makeEquipmentReservation', [ReservationEquipmentController::class, 'addReservationEquipment']);
 Route::get('/getEquipmentReservation/{id}', [ReservationEquipmentController::class, 'getReservationEquipment']);
+Route::delete('/deleteEquipmentReservation/{reservationId}/{equipmentId}', [ReservationEquipmentController::class, 'delete']);

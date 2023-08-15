@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Http\Resources\InstructorResource;
 use App\Models\Instructor;
+use App\Models\Period;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
@@ -167,10 +168,57 @@ class InstructorController extends Controller
         return InstructorResource::collection($instructors);
     }
 
+    public function getInstructorsByMountain($mountain)
+    {
+        $instructors = Instructor::where('mountain_id', $mountain)
+            ->where('status', 1)
+            ->get();
+
+        return InstructorResource::collection($instructors);
+    }
+
     public function getInstructor($id)
     {
         $instructor = Instructor::where('id', $id)->get();
 
         return response()->json(['instructor' => $instructor]);
+    }
+
+    public function filterInstructors(Request $request)
+    {
+        $data = $request->all();
+
+        $query = Instructor::query();
+
+        //if (!empty($data['status'])) {
+        $query->where('status', $data['status']);
+        //}
+
+        if (!empty($data['name'])) {
+            $query->where(function ($q) use ($data) {
+                $q->where('name', 'like', '%' . $data['name'] . '%')
+                    ->orWhere('surname', 'like', '%' . $data['name'] . '%');
+            });
+        }
+        if (!empty($data['activity'])) {
+            $query->where('activity', 'like', '%' . $data['activity'] . '%');
+        }
+
+        if (!empty($data['mountain']) && $data['mountain'] != 0) {
+            $query->where('mountain_id', 'like', '%' . $data['mountain'] . '%');
+        }
+
+        if (!empty($data['dateFrom']) && !empty($data['dateTo'])) {
+            $instructorIdsWithClasses = Period::whereBetween('date', [$data['dateFrom'], $data['dateTo']])
+                ->pluck('instructor_id')
+                ->unique()
+                ->toArray();
+
+            $query->whereIn('id', $instructorIdsWithClasses);
+        }
+
+        $filteredInstructors = $query->get();
+
+        return InstructorResource::collection($filteredInstructors);
     }
 }

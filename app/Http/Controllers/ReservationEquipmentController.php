@@ -21,7 +21,8 @@ class ReservationEquipmentController extends Controller
         $equipment = Equipment::findOrFail($request->equipment_id);
 
         $reservation->equipment()->attach($request->equipment_id, ['equipmentInformation' => $request->equipmentInformation]);
-
+        $reservation->totalPrice = $reservation->totalPrice + $equipment->price;
+        $reservation->update();
         return response()->json(['success' => 'true', 'message' => 'Equipment added to reservation successfully']);
     }
 
@@ -34,5 +35,18 @@ class ReservationEquipmentController extends Controller
         return response()->json([
             'reservation_equipment' => $reservationEquipment,
         ]);
+    }
+
+    public function delete($reservationId, $equipmentId)
+    {
+        $reservation = Reservation::findOrFail($reservationId);
+        $equipment = Equipment::findOrFail($equipmentId);
+
+        $reservation->totalPrice = $reservation->totalPrice - $equipment->price;
+        $reservation->update();
+
+        $reservation->equipment()->detach($equipmentId);
+
+        return response()->json(['message' => 'Reservation Equipment deleted successfully', 'newPrice' => $reservation->totalPrice]);
     }
 }

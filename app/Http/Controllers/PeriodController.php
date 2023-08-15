@@ -16,7 +16,9 @@ class PeriodController extends Controller
     public function index($id)
     {
 
-        $periods = Period::where('instructor_id', $id)->get();
+        $periods = Period::where('instructor_id', $id)
+            ->where('status', 0)
+            ->get();
 
         return PeriodResource::collection($periods);
     }
